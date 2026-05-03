@@ -7,6 +7,34 @@ Sync AI skills, commands, and agents across your projects from a central registr
 
 skillsync keeps your AI assistant bundles (skills, slash commands, agent configs) consistent across every repo — pull from a shared registry, transform to the format your tooling expects, and push local edits back up.
 
+## ⚡ Install
+
+**Linux / macOS** — installs to `~/.local/bin`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/rolfwessels/skillsync/main/install.sh | sh
+```
+
+**Windows (PowerShell)** — installs to `%LOCALAPPDATA%\Programs\skillsync\` and adds it to your user PATH:
+
+```powershell
+irm https://raw.githubusercontent.com/rolfwessels/skillsync/main/install.ps1 | iex
+```
+
+Want a different location? Set `INSTALL_DIR` first:
+
+```bash
+INSTALL_DIR=/usr/local/bin curl -fsSL https://raw.githubusercontent.com/rolfwessels/skillsync/main/install.sh | sh
+```
+
+```powershell
+$env:INSTALL_DIR = 'C:\tools\skillsync'; irm https://raw.githubusercontent.com/rolfwessels/skillsync/main/install.ps1 | iex
+```
+
+To upgrade, just re-run the same command. Both scripts pull the latest binary from the [`latest` GitHub release](https://github.com/rolfwessels/skillsync/releases/tag/latest), which is rebuilt on every push to `main`.
+
+Prefer to download by hand? Grab the right archive for your platform from the [releases page](https://github.com/rolfwessels/skillsync/releases/tag/latest), extract, and put the binary somewhere on your PATH.
+
 ## 📦 Technology
 
 - [Cobra](https://github.com/spf13/cobra) for the CLI
@@ -101,7 +129,7 @@ PR builds attach archives as workflow artifacts. Merging to `main` publishes the
 Yes — binaries are published for all three platforms.
 
 **How do I update to the latest version?**  
-Pull the latest changes and rebuild: `make build up`
+Re-run the install command (`install.sh` or `install.ps1`). It overwrites the binary in place from the latest release.
 
 ## Research
 
