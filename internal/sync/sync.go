@@ -99,7 +99,8 @@ func syncBundle(projectRoot, bundleDir, kind, name, format, bundleRef string, lf
 			State:        StateClean,
 		})
 	}
-	return nil
+	current := currentTargetSet(spec, bundleDir, name, contentFiles)
+	return pullDeleteOrphans(projectRoot, format, bundleRef, current, lf, warnings)
 }
 
 func hashOfFileIfExists(path string) (hash string, exists bool, err error) {

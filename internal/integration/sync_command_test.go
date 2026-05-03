@@ -124,6 +124,85 @@ func TestSync_OldLockfile_MigratesWithoutDataLoss(t *testing.T) {
 	assert.Equal(t, localContent, mustReadFile(t, filepath.Join(projectRoot, ".cursor", "rules", "naming-convention.mdc")))
 }
 
+// Scenario: registry-side delete + clean local file → sync removes file and drops lock entry.
+func TestSync_RegistryFileRemoved_FileClean_DeletesAndDropsLock(t *testing.T) {
+	// arrange
+	regDir := multiFormatRegistry(t)
+	projectRoot := t.TempDir()
+	cfg := config.ProjectConfig{
+		Registry: regDir,
+		Formats:  []string{"cursor"},
+		Bundles:  []string{"skills/scripted"},
+	}
+	require.NoError(t, sync.Sync(projectRoot, regDir, cfg, io.Discard, io.Discard))
+
+	projectFile := filepath.Join(projectRoot, ".cursor", "skills", "scripted", "scripts", "helper.sh")
+	require.FileExists(t, projectFile)
+	require.NoError(t, os.Remove(filepath.Join(regDir, "skills", "scripted", "scripts", "helper.sh")))
+
+	// act
+	require.NoError(t, sync.Sync(projectRoot, regDir, cfg, io.Discard, io.Discard))
+
+	// assert
+	_, err := os.Stat(projectFile)
+	assert.True(t, os.IsNotExist(err), "project file should be deleted, got err=%v", err)
+	for _, e := range readLockEntries(t, projectRoot) {
+		assert.NotEqual(t, ".cursor/skills/scripted/scripts/helper.sh", e.Target)
+	}
+}
+
+// Scenario: registry-side delete + locally modified file → conflict, file untouched.
+func TestSync_RegistryFileRemoved_LocallyModified_ReportsConflict(t *testing.T) {
+	// arrange
+	regDir := multiFormatRegistry(t)
+	projectRoot := t.TempDir()
+	cfg := config.ProjectConfig{
+		Registry: regDir,
+		Formats:  []string{"cursor"},
+		Bundles:  []string{"skills/scripted"},
+	}
+	require.NoError(t, sync.Sync(projectRoot, regDir, cfg, io.Discard, io.Discard))
+
+	projectFile := filepath.Join(projectRoot, ".cursor", "skills", "scripted", "scripts", "helper.sh")
+	require.NoError(t, os.WriteFile(projectFile, []byte("LOCAL EDIT\n"), 0644))
+	require.NoError(t, os.Remove(filepath.Join(regDir, "skills", "scripted", "scripts", "helper.sh")))
+
+	// act
+	err := sync.Sync(projectRoot, regDir, cfg, io.Discard, io.Discard)
+
+	// assert
+	require.Error(t, err)
+	assert.ErrorIs(t, err, sync.ErrConflict)
+	body, statErr := os.ReadFile(projectFile)
+	require.NoError(t, statErr, "locally modified file should remain in place on conflict")
+	assert.Equal(t, "LOCAL EDIT\n", string(body))
+}
+
+// Round-trip: registry-side delete → sync → project file gone, lockfile entry gone.
+func TestSync_RoundTrip_RegistryDelete_RemovesProjectFileAndLockEntry(t *testing.T) {
+	// arrange
+	regDir := multiFormatRegistry(t)
+	projectRoot := t.TempDir()
+	cfg := config.ProjectConfig{
+		Registry: regDir,
+		Formats:  []string{"cursor"},
+		Bundles:  []string{"skills/scripted"},
+	}
+	require.NoError(t, sync.Sync(projectRoot, regDir, cfg, io.Discard, io.Discard))
+
+	require.NoError(t, os.Remove(filepath.Join(regDir, "skills", "scripted", "scripts", "helper.sh")))
+
+	// act
+	require.NoError(t, sync.Sync(projectRoot, regDir, cfg, io.Discard, io.Discard))
+
+	// assert
+	_, err := os.Stat(filepath.Join(projectRoot, ".cursor", "skills", "scripted", "scripts", "helper.sh"))
+	assert.True(t, os.IsNotExist(err))
+	for _, e := range readLockEntries(t, projectRoot) {
+		assert.NotEqual(t, ".cursor/skills/scripted/scripts/helper.sh", e.Target)
+	}
+}
+
 // stripNewLockFields rewrites the lockfile, removing registry_hash/local_hash/state to simulate an old-format lockfile.
 func stripNewLockFields(t *testing.T, projectRoot string) {
 	t.Helper()
