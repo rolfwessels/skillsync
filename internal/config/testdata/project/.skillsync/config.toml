@@ -1,0 +1,3 @@
+registry = "~/.skillsync/registry"
+formats  = ["claude", "cursor"]
+bundles  = ["skills/tdd", "rules/naming"]

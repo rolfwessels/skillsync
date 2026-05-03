@@ -1,0 +1,53 @@
+[[entries]]
+  bundle = "rules/go-general"
+  format = "cursor"
+  target = ".cursor/rules/go-general.mdc"
+  hash = "da6e9658667a4eddb769d4fd54cd7f7f6c1677bba97adb0b708786e7c4e5d75d"
+  registry_hash = "3f6b43ff79ec30e0c7ac1575dda61628dc973fffadcd9fe8f6918d1697e46d57"
+  local_hash = "da6e9658667a4eddb769d4fd54cd7f7f6c1677bba97adb0b708786e7c4e5d75d"
+  state = "clean"
+
+[[entries]]
+  bundle = "rules/go-naming"
+  format = "cursor"
+  target = ".cursor/rules/go-naming.mdc"
+  hash = "38be026be6acbddd9b2815817ad5ce844e9d3f4becb55a7e347f00b3099aa0c8"
+  registry_hash = "d569f7efcf1e7042ddea51ecd67f6f9b353267b4add0fe633d5156c77e64c470"
+  local_hash = "38be026be6acbddd9b2815817ad5ce844e9d3f4becb55a7e347f00b3099aa0c8"
+  state = "clean"
+
+[[entries]]
+  bundle = "rules/go-testing"
+  format = "cursor"
+  target = ".cursor/rules/go-testing.mdc"
+  hash = "469b6d5fa06b95ab04b194235f9a712c0c006e024c01f8eec64c64547763d34b"
+  registry_hash = "3c777f42dab3e9e32dc401194f4e0387de999b907fa39906db2a24419a512584"
+  local_hash = "469b6d5fa06b95ab04b194235f9a712c0c006e024c01f8eec64c64547763d34b"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/commit"
+  format = "cursor"
+  target = ".cursor/skills/commit/SKILL.md"
+  hash = "a00df8bbd81bbf2174e5132878558bfa00552fc618a999e008bca102626fe679"
+  registry_hash = "a00df8bbd81bbf2174e5132878558bfa00552fc618a999e008bca102626fe679"
+  local_hash = "a00df8bbd81bbf2174e5132878558bfa00552fc618a999e008bca102626fe679"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/commit"
+  format = "cursor"
+  target = ".cursor/skills/commit/skillsync.code-workspace"
+  hash = "bac040be4fe050b417200122168d5843be41dc1b9a4001b170338fa9d05ba757"
+  registry_hash = "bac040be4fe050b417200122168d5843be41dc1b9a4001b170338fa9d05ba757"
+  local_hash = "bac040be4fe050b417200122168d5843be41dc1b9a4001b170338fa9d05ba757"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/loop-dev-issues"
+  format = "cursor"
+  target = ".cursor/skills/loop-dev-issues/SKILL.md"
+  hash = "1aec3ff5deedffe2726a11ffb1316882859d7adfeb981bf0450eb2707f38579f"
+  registry_hash = "1aec3ff5deedffe2726a11ffb1316882859d7adfeb981bf0450eb2707f38579f"
+  local_hash = "1aec3ff5deedffe2726a11ffb1316882859d7adfeb981bf0450eb2707f38579f"
+  state = "clean"

@@ -1,0 +1,12 @@
+dist/
+.git/
+.vscode/
+.aws/
+.env
+.env.*
+Dockerfile*
+docker-compose*
+.dockerignore
+README.md
+LICENSE.txt
+*.md

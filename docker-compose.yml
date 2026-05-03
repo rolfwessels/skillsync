@@ -1,0 +1,31 @@
+services:
+  dev:
+    container_name: skillsync-dev
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: dev
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    volumes:
+      - ".:/skillsync"
+      - "./.aws:/home/dev/.aws"
+      - "./zshrc:/home/dev/.zshrc"
+      - skillsync-cache:/cache
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Keep Go build cache outside the bind mount for performance
+      - skillsync-gocache:/home/dev/.cache/go-build
+      - skillsync-gomod:/home/dev/go/pkg/mod
+    environment:
+      - GOPATH=/home/dev/go
+      - GOCACHE=/home/dev/.cache/go-build
+      - HISTFILE=/cache/.zsh_history
+    entrypoint: top -b
+    logging:
+      driver: none
+
+volumes:
+  skillsync-cache:
+  skillsync-gocache:
+  skillsync-gomod:

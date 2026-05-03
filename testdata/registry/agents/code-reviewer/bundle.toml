@@ -1,0 +1,2 @@
+description = "Code review agent for pull requests"
+tags = ["review", "quality"]
