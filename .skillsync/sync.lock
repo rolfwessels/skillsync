@@ -101,9 +101,9 @@
   bundle = "skills/loop-dev-issues"
   format = "claude"
   target = ".claude/skills/loop-dev-issues/SKILL.md"
-  hash = "1aec3ff5deedffe2726a11ffb1316882859d7adfeb981bf0450eb2707f38579f"
-  registry_hash = "1aec3ff5deedffe2726a11ffb1316882859d7adfeb981bf0450eb2707f38579f"
-  local_hash = "1aec3ff5deedffe2726a11ffb1316882859d7adfeb981bf0450eb2707f38579f"
+  hash = "28159e47a12a89a5d6b09b25db60926cd444664f20138d786afba5e4272f7a4b"
+  registry_hash = "28159e47a12a89a5d6b09b25db60926cd444664f20138d786afba5e4272f7a4b"
+  local_hash = "28159e47a12a89a5d6b09b25db60926cd444664f20138d786afba5e4272f7a4b"
   state = "clean"
 
 [[entries]]
@@ -122,4 +122,31 @@
   hash = "c43b60462597de2e87e7da71bd93a88c8fd3cacd6383b677d6b19ccaea425956"
   registry_hash = "c43b60462597de2e87e7da71bd93a88c8fd3cacd6383b677d6b19ccaea425956"
   local_hash = "c43b60462597de2e87e7da71bd93a88c8fd3cacd6383b677d6b19ccaea425956"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/loop-dev-issues"
+  format = "claude"
+  target = ".claude/skills/loop-dev-issues/scripts/list-issues.sh"
+  hash = "5ff566c8bd9f0b8b1d5dd26809afd510c91303a9fb29c49a08e220ac2cf4bf47"
+  registry_hash = "5ff566c8bd9f0b8b1d5dd26809afd510c91303a9fb29c49a08e220ac2cf4bf47"
+  local_hash = "5ff566c8bd9f0b8b1d5dd26809afd510c91303a9fb29c49a08e220ac2cf4bf47"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/loop-dev-issues"
+  format = "claude"
+  target = ".claude/skills/loop-dev-issues/scripts/next-issue.sh"
+  hash = "5ba92b27d26e9ee6a72a0792a34c23e966a6ec523996bcae8eb1a0e9d830e335"
+  registry_hash = "5ba92b27d26e9ee6a72a0792a34c23e966a6ec523996bcae8eb1a0e9d830e335"
+  local_hash = "5ba92b27d26e9ee6a72a0792a34c23e966a6ec523996bcae8eb1a0e9d830e335"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/to-issues-local"
+  format = "claude"
+  target = ".claude/skills/to-issues-local/SKILL.md"
+  hash = "8ec0c08492b80c350647769e4c09630385cabc65614eeab8f23d3f7499f083fd"
+  registry_hash = "8ec0c08492b80c350647769e4c09630385cabc65614eeab8f23d3f7499f083fd"
+  local_hash = "8ec0c08492b80c350647769e4c09630385cabc65614eeab8f23d3f7499f083fd"
   state = "clean"
