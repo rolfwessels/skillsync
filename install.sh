@@ -18,7 +18,7 @@ case "$(uname -m)" in
 esac
 
 ARCHIVE="${BIN}-${OS}-${ARCH}.tar.gz"
-URL="https://github.com/${REPO}/releases/download/latest/${ARCHIVE}"
+URL="https://github.com/${REPO}/releases/latest/download/${ARCHIVE}"
 
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT

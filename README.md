@@ -31,9 +31,9 @@ INSTALL_DIR=/usr/local/bin curl -fsSL https://raw.githubusercontent.com/rolfwess
 $env:INSTALL_DIR = 'C:\tools\skillsync'; irm https://raw.githubusercontent.com/rolfwessels/skillsync/main/install.ps1 | iex
 ```
 
-To upgrade, just re-run the same command. Both scripts pull the latest binary from the [`latest` GitHub release](https://github.com/rolfwessels/skillsync/releases/tag/latest), which is rebuilt on every push to `main`.
+To upgrade, just re-run the same command. Both scripts pull the binary from the [latest GitHub release](https://github.com/rolfwessels/skillsync/releases/latest), which is published on every push to `main` under a new version tag.
 
-Prefer to download by hand? Grab the right archive for your platform from the [releases page](https://github.com/rolfwessels/skillsync/releases/tag/latest), extract, and put the binary somewhere on your PATH.
+Prefer to download by hand? Grab the right archive for your platform from the [releases page](https://github.com/rolfwessels/skillsync/releases), extract, and put the binary somewhere on your PATH.
 
 ## 📦 Technology
 
@@ -121,7 +121,7 @@ make version
 ### Development Workflow
 
 Feature branches are created off `main` with the prefix `feature/` or `bug/`.
-PR builds attach archives as workflow artifacts. Merging to `main` publishes them to the rolling [`latest` GitHub release](https://github.com/rolfwessels/skillsync/releases/tag/latest).
+PR builds attach archives as workflow artifacts. Merging to `main` publishes them as a new versioned [GitHub release](https://github.com/rolfwessels/skillsync/releases).
 
 ## FAQ
 

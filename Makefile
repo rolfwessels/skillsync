@@ -97,6 +97,9 @@ build: down
 version:
 	@echo -e "Version ${GREEN}v$(version-full)${NC}"
 
+print-version:
+	@echo $(version-full)
+
 start:
 	@echo -e "Starting $(project)"
 	@go run ./cmd/skillsync -- --help

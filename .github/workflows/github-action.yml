@@ -77,13 +77,17 @@ jobs:
           name: skillsync-binaries
           path: dist
 
-      - name: Publish rolling 'latest' release
+      - name: Compute version
+        id: version
+        run: echo "value=$(make -s print-version)" >> $GITHUB_OUTPUT
+
+      - name: Publish versioned release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: latest
-          name: latest
+          tag_name: v${{ steps.version.outputs.value }}
+          name: v${{ steps.version.outputs.value }}
           body: |
-            Rolling release — auto-built from `main`.
+            Auto-built from `main`.
 
             **Commit:** [`${{ github.sha }}`](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
             **Built:** ${{ github.event.head_commit.timestamp }}

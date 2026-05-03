@@ -10,7 +10,7 @@ if ($arch -ne 'AMD64') {
 }
 
 $Archive = "$Bin-windows-amd64.zip"
-$Url = "https://github.com/$Repo/releases/download/latest/$Archive"
+$Url = "https://github.com/$Repo/releases/latest/download/$Archive"
 
 $Tmp = New-Item -ItemType Directory -Path (Join-Path $env:TEMP "skillsync-install-$(Get-Random)")
 try {
