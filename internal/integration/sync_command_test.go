@@ -140,12 +140,7 @@ func stripNewLockFields(t *testing.T, projectRoot string) {
 	entries := readLockEntries(t, projectRoot)
 	old := oldLock{}
 	for _, e := range entries {
-		old.Entries = append(old.Entries, oldEntry{
-			Bundle: e.Bundle,
-			Format: e.Format,
-			Target: e.Target,
-			Hash:   e.Hash,
-		})
+		old.Entries = append(old.Entries, oldEntry(e))
 	}
 
 	lockPath := filepath.Join(projectRoot, ".skillsync", "sync.lock")
