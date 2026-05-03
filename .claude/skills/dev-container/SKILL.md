@@ -30,7 +30,7 @@ docker ps --filter "name=skillsync-dev" --format '{{.Status}}'
 If empty, start it:
 
 ```bash
-docker compose up -d dev
+
 ```
 
 Do not run `make up` — it tries to attach an interactive zsh shell.
