@@ -105,18 +105,26 @@ test:
 	@echo -e "Testing ${GREEN}v$(version)${NC}"
 	@go test ./... -v -count=1
 
+PLATFORMS := linux-amd64 linux-arm64 windows-amd64 darwin-amd64 darwin-arm64
+
 publish:
 	@echo -e "Building ${GREEN}v$(version-full)${NC} release of $(project)"
-	@GOOS=linux  GOARCH=amd64 go build \
-		-ldflags="-X 'github.com/rolfwessels/skillsync/internal/cli.Version=$(version-full)'" \
-		-o ./dist/linux-amd64/$(binary) ./cmd/skillsync
-	@GOOS=windows GOARCH=amd64 go build \
-		-ldflags="-X 'github.com/rolfwessels/skillsync/internal/cli.Version=$(version-full)'" \
-		-o ./dist/windows-amd64/$(binary).exe ./cmd/skillsync
-	@GOOS=darwin  GOARCH=arm64 go build \
-		-ldflags="-X 'github.com/rolfwessels/skillsync/internal/cli.Version=$(version-full)'" \
-		-o ./dist/darwin-arm64/$(binary) ./cmd/skillsync
+	@rm -rf ./dist
+	@for platform in $(PLATFORMS); do \
+		os=$${platform%-*}; arch=$${platform##*-}; ext=""; \
+		[ "$$os" = "windows" ] && ext=".exe"; \
+		echo "  → $$platform"; \
+		GOOS=$$os GOARCH=$$arch CGO_ENABLED=0 go build \
+			-ldflags="-s -w -X 'github.com/rolfwessels/skillsync/internal/cli.Version=$(version-full)'" \
+			-o ./dist/$$platform/$(binary)$$ext ./cmd/skillsync || exit 1; \
+		if [ "$$os" = "windows" ]; then \
+			(cd ./dist/$$platform && zip -q ../$(binary)-$$platform.zip $(binary)$$ext); \
+		else \
+			tar -czf ./dist/$(binary)-$$platform.tar.gz -C ./dist/$$platform $(binary); \
+		fi; \
+	done
 	@echo "Artifacts in ./dist/"
+	@ls -lh ./dist/*.tar.gz ./dist/*.zip
 
 install:
 	@test -f dist/linux-amd64/$(binary) || { printf "${RED}error${NC}: dist/linux-amd64/$(binary) not found — run 'make publish' first\n"; exit 1; }
