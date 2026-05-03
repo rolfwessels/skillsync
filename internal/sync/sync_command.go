@@ -107,6 +107,12 @@ func syncEvaluate(projectRoot, bundleDir, kind, name, format, bundleRef string, 
 			lf.upsertState(bundleRef, format, targetPath, StateConflict)
 		}
 	}
+	current := currentTargetSet(spec, bundleDir, name, contentFiles)
+	deleteConflicts, err := syncDeleteOrphans(projectRoot, format, bundleRef, current, lf)
+	if err != nil {
+		return nil, err
+	}
+	conflicts = append(conflicts, deleteConflicts...)
 	return conflicts, nil
 }
 

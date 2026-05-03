@@ -51,3 +51,102 @@
   registry_hash = "1aec3ff5deedffe2726a11ffb1316882859d7adfeb981bf0450eb2707f38579f"
   local_hash = "1aec3ff5deedffe2726a11ffb1316882859d7adfeb981bf0450eb2707f38579f"
   state = "clean"
+
+[[entries]]
+  bundle = "rules/go-general"
+  format = "claude"
+  target = ".claude/rules/go-general.md"
+  hash = "da6e9658667a4eddb769d4fd54cd7f7f6c1677bba97adb0b708786e7c4e5d75d"
+  registry_hash = "3f6b43ff79ec30e0c7ac1575dda61628dc973fffadcd9fe8f6918d1697e46d57"
+  local_hash = "da6e9658667a4eddb769d4fd54cd7f7f6c1677bba97adb0b708786e7c4e5d75d"
+  state = "clean"
+
+[[entries]]
+  bundle = "rules/go-naming"
+  format = "claude"
+  target = ".claude/rules/go-naming.md"
+  hash = "b80a8dd5c417e3b44894881aebd9758750d2312c3c0bb187d6ff3ac240168d27"
+  registry_hash = "d569f7efcf1e7042ddea51ecd67f6f9b353267b4add0fe633d5156c77e64c470"
+  local_hash = "b80a8dd5c417e3b44894881aebd9758750d2312c3c0bb187d6ff3ac240168d27"
+  state = "clean"
+
+[[entries]]
+  bundle = "rules/go-testing"
+  format = "claude"
+  target = ".claude/rules/go-testing.md"
+  hash = "a07ced116bc9088cf485bd61c52b24e6000110c773f03367beeee13ec9239b8a"
+  registry_hash = "3c777f42dab3e9e32dc401194f4e0387de999b907fa39906db2a24419a512584"
+  local_hash = "a07ced116bc9088cf485bd61c52b24e6000110c773f03367beeee13ec9239b8a"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/commit"
+  format = "claude"
+  target = ".claude/skills/commit/SKILL.md"
+  hash = "a00df8bbd81bbf2174e5132878558bfa00552fc618a999e008bca102626fe679"
+  registry_hash = "a00df8bbd81bbf2174e5132878558bfa00552fc618a999e008bca102626fe679"
+  local_hash = "a00df8bbd81bbf2174e5132878558bfa00552fc618a999e008bca102626fe679"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/commit"
+  format = "claude"
+  target = ".claude/skills/commit/skillsync.code-workspace"
+  hash = "2451e1e0c4d458878f139f3505296592890ec708d6cb3d7c84069cea67642bd9"
+  registry_hash = "2451e1e0c4d458878f139f3505296592890ec708d6cb3d7c84069cea67642bd9"
+  local_hash = "2451e1e0c4d458878f139f3505296592890ec708d6cb3d7c84069cea67642bd9"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/loop-dev-issues"
+  format = "claude"
+  target = ".claude/skills/loop-dev-issues/SKILL.md"
+  hash = "28159e47a12a89a5d6b09b25db60926cd444664f20138d786afba5e4272f7a4b"
+  registry_hash = "28159e47a12a89a5d6b09b25db60926cd444664f20138d786afba5e4272f7a4b"
+  local_hash = "28159e47a12a89a5d6b09b25db60926cd444664f20138d786afba5e4272f7a4b"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/dev-container"
+  format = "claude"
+  target = ".claude/skills/dev-container/SKILL.md"
+  hash = "05a13299170c821c07b518e8470a5159622d2138bd37ff4b3b110434c66b7011"
+  registry_hash = "05a13299170c821c07b518e8470a5159622d2138bd37ff4b3b110434c66b7011"
+  local_hash = "05a13299170c821c07b518e8470a5159622d2138bd37ff4b3b110434c66b7011"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/to-issues"
+  format = "claude"
+  target = ".claude/skills/to-issues/SKILL.md"
+  hash = "c43b60462597de2e87e7da71bd93a88c8fd3cacd6383b677d6b19ccaea425956"
+  registry_hash = "c43b60462597de2e87e7da71bd93a88c8fd3cacd6383b677d6b19ccaea425956"
+  local_hash = "c43b60462597de2e87e7da71bd93a88c8fd3cacd6383b677d6b19ccaea425956"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/loop-dev-issues"
+  format = "claude"
+  target = ".claude/skills/loop-dev-issues/scripts/list-issues.sh"
+  hash = "5ff566c8bd9f0b8b1d5dd26809afd510c91303a9fb29c49a08e220ac2cf4bf47"
+  registry_hash = "5ff566c8bd9f0b8b1d5dd26809afd510c91303a9fb29c49a08e220ac2cf4bf47"
+  local_hash = "5ff566c8bd9f0b8b1d5dd26809afd510c91303a9fb29c49a08e220ac2cf4bf47"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/loop-dev-issues"
+  format = "claude"
+  target = ".claude/skills/loop-dev-issues/scripts/next-issue.sh"
+  hash = "5ba92b27d26e9ee6a72a0792a34c23e966a6ec523996bcae8eb1a0e9d830e335"
+  registry_hash = "5ba92b27d26e9ee6a72a0792a34c23e966a6ec523996bcae8eb1a0e9d830e335"
+  local_hash = "5ba92b27d26e9ee6a72a0792a34c23e966a6ec523996bcae8eb1a0e9d830e335"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/to-issues-local"
+  format = "claude"
+  target = ".claude/skills/to-issues-local/SKILL.md"
+  hash = "8ec0c08492b80c350647769e4c09630385cabc65614eeab8f23d3f7499f083fd"
+  registry_hash = "8ec0c08492b80c350647769e4c09630385cabc65614eeab8f23d3f7499f083fd"
+  local_hash = "8ec0c08492b80c350647769e4c09630385cabc65614eeab8f23d3f7499f083fd"
+  state = "clean"

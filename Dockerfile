@@ -12,6 +12,7 @@ RUN apk update \
     make \
     rsync \
     nano \
+    zip \
     zsh \
     zsh-vcs \
     docker-cli \
@@ -64,9 +65,6 @@ RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master
     chown -R dev:dev /home/dev
 
 USER dev
-
-# goreleaser (for snapshot builds)
-RUN go install github.com/goreleaser/goreleaser/v2@latest
 
 # golangci-lint
 RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest

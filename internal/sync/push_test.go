@@ -196,3 +196,158 @@ func TestPush_AgentReverseTransformUpdatesRegistry(t *testing.T) {
 	assert.Contains(t, string(got), "read_only:")
 	assert.Contains(t, string(got), "Local")
 }
+
+func TestPush_NewProjectFile_writtenToBundleAndLocked(t *testing.T) {
+	// arrange
+	regDir := copyRegistryToTemp(t)
+	projectRoot := t.TempDir()
+	cfg := sampleConfig([]string{"cursor"}, []string{"skills/tdd"})
+	require.NoError(t, config.Write(projectRoot, cfg))
+	var warn bytes.Buffer
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	newFile := filepath.Join(projectRoot, ".cursor", "skills", "tdd", "scripts", "next.sh")
+	require.NoError(t, os.MkdirAll(filepath.Dir(newFile), 0755))
+	require.NoError(t, os.WriteFile(newFile, []byte("#!/bin/sh\necho next\n"), 0644))
+
+	// act
+	require.NoError(t, sync.Push(projectRoot, regDir, cfg))
+
+	// assert
+	regFile := filepath.Join(regDir, "skills", "tdd", "scripts", "next.sh")
+	regBody, err := os.ReadFile(regFile)
+	require.NoError(t, err)
+	assert.Equal(t, "#!/bin/sh\necho next\n", string(regBody))
+
+	entries, err := sync.LoadLockEntries(projectRoot)
+	require.NoError(t, err)
+	var found bool
+	for _, e := range entries {
+		if e.Target == ".cursor/skills/tdd/scripts/next.sh" {
+			found = true
+			assert.Equal(t, "skills/tdd", e.Bundle)
+			assert.Equal(t, "cursor", e.Format)
+			assert.Equal(t, sync.StateClean, e.State)
+		}
+	}
+	assert.True(t, found, "lockfile should contain entry for newly pushed file")
+}
+
+func TestPush_NewProjectFile_nestedDir_preservesStructure(t *testing.T) {
+	// arrange
+	regDir := copyRegistryToTemp(t)
+	projectRoot := t.TempDir()
+	cfg := sampleConfig([]string{"cursor"}, []string{"skills/tdd"})
+	require.NoError(t, config.Write(projectRoot, cfg))
+	var warn bytes.Buffer
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	deep := filepath.Join(projectRoot, ".cursor", "skills", "tdd", "scripts", "sub", "foo.sh")
+	require.NoError(t, os.MkdirAll(filepath.Dir(deep), 0755))
+	require.NoError(t, os.WriteFile(deep, []byte("nested\n"), 0644))
+
+	// act
+	require.NoError(t, sync.Push(projectRoot, regDir, cfg))
+
+	// assert
+	regFile := filepath.Join(regDir, "skills", "tdd", "scripts", "sub", "foo.sh")
+	body, err := os.ReadFile(regFile)
+	require.NoError(t, err)
+	assert.Equal(t, "nested\n", string(body))
+}
+
+func TestPush_RemovedProjectFile_deletesBundleFileAndLockEntry(t *testing.T) {
+	// arrange
+	regDir := copyRegistryToTemp(t)
+	projectRoot := t.TempDir()
+	cfg := sampleConfig([]string{"cursor"}, []string{"skills/scripted"})
+	require.NoError(t, config.Write(projectRoot, cfg))
+	var warn bytes.Buffer
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	projectScript := filepath.Join(projectRoot, ".cursor", "skills", "scripted", "scripts", "helper.sh")
+	require.FileExists(t, projectScript)
+	require.NoError(t, os.Remove(projectScript))
+
+	// act
+	require.NoError(t, sync.Push(projectRoot, regDir, cfg))
+
+	// assert
+	regScript := filepath.Join(regDir, "skills", "scripted", "scripts", "helper.sh")
+	_, err := os.Stat(regScript)
+	assert.True(t, os.IsNotExist(err), "deleted project file should remove bundle file, got err=%v", err)
+
+	entries, err := sync.LoadLockEntries(projectRoot)
+	require.NoError(t, err)
+	for _, e := range entries {
+		assert.NotEqual(t, ".cursor/skills/scripted/scripts/helper.sh", e.Target,
+			"lockfile entry for removed project file should be dropped")
+	}
+}
+
+func TestPush_BundleFileWithoutLockEntry_leftUntouched(t *testing.T) {
+	// arrange
+	regDir := copyRegistryToTemp(t)
+	projectRoot := t.TempDir()
+	cfg := sampleConfig([]string{"cursor"}, []string{"skills/tdd"})
+	require.NoError(t, config.Write(projectRoot, cfg))
+	var warn bytes.Buffer
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	// add a file directly into the registry bundle that was never synced into the project
+	registryOnly := filepath.Join(regDir, "skills", "tdd", "registry-only.txt")
+	require.NoError(t, os.WriteFile(registryOnly, []byte("registry-only\n"), 0644))
+
+	// act
+	require.NoError(t, sync.Push(projectRoot, regDir, cfg))
+
+	// assert
+	body, err := os.ReadFile(registryOnly)
+	require.NoError(t, err, "registry-only file must not be deleted by push")
+	assert.Equal(t, "registry-only\n", string(body))
+}
+
+func TestPush_MissingBundleDir_doesNotCrash(t *testing.T) {
+	// arrange
+	regDir := copyRegistryToTemp(t)
+	projectRoot := t.TempDir()
+	cfg := sampleConfig([]string{"cursor"}, []string{"skills/tdd"})
+	require.NoError(t, config.Write(projectRoot, cfg))
+	var warn bytes.Buffer
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	// nuke the registry bundle so the lockfile points at a missing bundle dir
+	require.NoError(t, os.RemoveAll(filepath.Join(regDir, "skills", "tdd")))
+
+	// act
+	err := sync.Push(projectRoot, regDir, cfg)
+
+	// assert
+	require.NoError(t, err, "push must skip missing bundle dirs gracefully")
+}
+
+func TestPush_NewFile_RoundTripsThroughSyncIntoFreshProject(t *testing.T) {
+	// arrange — project A pushes a new file
+	regDir := copyRegistryToTemp(t)
+	projectA := t.TempDir()
+	cfg := sampleConfig([]string{"cursor"}, []string{"skills/tdd"})
+	require.NoError(t, config.Write(projectA, cfg))
+	var warn bytes.Buffer
+	require.NoError(t, sync.Run(projectA, regDir, cfg, &warn))
+
+	added := filepath.Join(projectA, ".cursor", "skills", "tdd", "scripts", "added.sh")
+	require.NoError(t, os.MkdirAll(filepath.Dir(added), 0755))
+	require.NoError(t, os.WriteFile(added, []byte("#!/bin/sh\nadded\n"), 0644))
+	require.NoError(t, sync.Push(projectA, regDir, cfg))
+
+	// act — project B syncs from the same registry
+	projectB := t.TempDir()
+	require.NoError(t, config.Write(projectB, cfg))
+	require.NoError(t, sync.Run(projectB, regDir, cfg, &warn))
+
+	// assert — file lands at the same project-relative path with identical content
+	pulled := filepath.Join(projectB, ".cursor", "skills", "tdd", "scripts", "added.sh")
+	body, err := os.ReadFile(pulled)
+	require.NoError(t, err)
+	assert.Equal(t, "#!/bin/sh\nadded\n", string(body))
+}

@@ -1,7 +1,7 @@
 ---
 alwaysApply: false
 description: Go naming conventions for this project
-globs:
+paths:
     - '**/*.go'
 ---
 

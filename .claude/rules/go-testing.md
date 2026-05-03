@@ -1,7 +1,7 @@
 ---
 alwaysApply: false
 description: Go testing practices for this project
-globs:
+paths:
     - '**/*_test.go'
 ---
 

@@ -12,7 +12,6 @@ skillsync keeps your AI assistant bundles (skills, slash commands, agent configs
 - [Cobra](https://github.com/spf13/cobra) for the CLI
 - [Bubble Tea](https://github.com/charmbracelet/bubbletea) + [Huh](https://github.com/charmbracelet/huh) for the TUI
 - [BurntSushi/toml](https://github.com/BurntSushi/toml) for config parsing
-- [GoReleaser](https://goreleaser.com/) for cross-platform releases
 - Docker for the dev environment
 - MakeFile because it just works!
 
@@ -65,7 +64,7 @@ make docker-publish
 | `make version`            | Show the current version                       |
 | `make start`              | Run skillsync                                  |
 | `make test`               | Run tests                                      |
-| `make publish`            | Build release binaries (linux/windows/darwin)  |
+| `make publish`            | Build release archives for 5 platforms         |
 | `make docker-login`       | Login to Docker registry                       |
 | `make docker-build`       | Build the production Docker image              |
 | `make docker-push`        | Push the Docker image                          |
@@ -93,8 +92,8 @@ make version
 
 ### Development Workflow
 
-Feature branches are created off `main` with the prefix `feature/` or `bug/`.  
-Changes merge to `main`, then a `v*` tag triggers the release pipeline.
+Feature branches are created off `main` with the prefix `feature/` or `bug/`.
+PR builds attach archives as workflow artifacts. Merging to `main` publishes them to the rolling [`latest` GitHub release](https://github.com/rolfwessels/skillsync/releases/tag/latest).
 
 ## FAQ
 
@@ -107,5 +106,4 @@ Pull the latest changes and rebuild: `make build up`
 ## Research
 
 - [Cobra CLI framework](https://cobra.dev/)
-- [GoReleaser docs](https://goreleaser.com/intro/)
 - [What is a Makefile?](https://opensource.com/article/18/8/what-how-makefile)

@@ -260,3 +260,116 @@ func mustReadFile(t *testing.T, path string) []byte {
 	require.NoError(t, err)
 	return b
 }
+
+func TestRun_RegistryFileRemoved_DeletesProjectFileAndDropsLockEntry(t *testing.T) {
+	// arrange
+	regDir := copyRegistryToTemp(t)
+	projectRoot := t.TempDir()
+	cfg := sampleConfig([]string{"cursor"}, []string{"skills/scripted"})
+	var warn bytes.Buffer
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	projectFile := filepath.Join(projectRoot, ".cursor", "skills", "scripted", "scripts", "helper.sh")
+	require.FileExists(t, projectFile)
+	require.NoError(t, os.Remove(filepath.Join(regDir, "skills", "scripted", "scripts", "helper.sh")))
+
+	// act
+	warn.Reset()
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	// assert
+	_, err := os.Stat(projectFile)
+	assert.True(t, os.IsNotExist(err), "project file should be deleted, got err=%v", err)
+
+	entries, err := sync.LoadLockEntries(projectRoot)
+	require.NoError(t, err)
+	for _, e := range entries {
+		assert.NotEqual(t, ".cursor/skills/scripted/scripts/helper.sh", e.Target,
+			"lockfile entry for removed registry file should be dropped")
+	}
+}
+
+func TestRun_RegistryFileRemoved_LocallyModified_StashesAndDeletes(t *testing.T) {
+	// arrange
+	regDir := copyRegistryToTemp(t)
+	projectRoot := t.TempDir()
+	cfg := sampleConfig([]string{"cursor"}, []string{"skills/scripted"})
+	var warn bytes.Buffer
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	projectFile := filepath.Join(projectRoot, ".cursor", "skills", "scripted", "scripts", "helper.sh")
+	require.NoError(t, os.WriteFile(projectFile, []byte("LOCAL\n"), 0644))
+	require.NoError(t, os.Remove(filepath.Join(regDir, "skills", "scripted", "scripts", "helper.sh")))
+
+	// act
+	warn.Reset()
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	// assert
+	_, err := os.Stat(projectFile)
+	assert.True(t, os.IsNotExist(err), "project file should be removed after stash, got err=%v", err)
+
+	matches, err := filepath.Glob(filepath.Join(projectRoot, ".skillsync", "stash", "*", ".cursor", "skills", "scripted", "scripts", "helper.sh"))
+	require.NoError(t, err)
+	require.Len(t, matches, 1, "exactly one stashed copy of the locally modified file")
+	stashed, err := os.ReadFile(matches[0])
+	require.NoError(t, err)
+	assert.Equal(t, "LOCAL\n", string(stashed))
+
+	entries, err := sync.LoadLockEntries(projectRoot)
+	require.NoError(t, err)
+	for _, e := range entries {
+		assert.NotEqual(t, ".cursor/skills/scripted/scripts/helper.sh", e.Target)
+	}
+}
+
+func TestRun_RegistryFileRemoved_ProjectFileAlreadyAbsent_DropsLockEntrySilently(t *testing.T) {
+	// arrange
+	regDir := copyRegistryToTemp(t)
+	projectRoot := t.TempDir()
+	cfg := sampleConfig([]string{"cursor"}, []string{"skills/scripted"})
+	var warn bytes.Buffer
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	projectFile := filepath.Join(projectRoot, ".cursor", "skills", "scripted", "scripts", "helper.sh")
+	require.NoError(t, os.Remove(projectFile))
+	require.NoError(t, os.Remove(filepath.Join(regDir, "skills", "scripted", "scripts", "helper.sh")))
+
+	// act
+	warn.Reset()
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	// assert
+	assert.Empty(t, warn.String(), "no warning expected for already-absent project file")
+	entries, err := sync.LoadLockEntries(projectRoot)
+	require.NoError(t, err)
+	for _, e := range entries {
+		assert.NotEqual(t, ".cursor/skills/scripted/scripts/helper.sh", e.Target)
+	}
+}
+
+func TestRun_RegistryFileRemoved_DoesNotTouchOtherBundlesLockEntries(t *testing.T) {
+	// arrange
+	regDir := copyRegistryToTemp(t)
+	projectRoot := t.TempDir()
+	cfg := sampleConfig([]string{"cursor"}, []string{"skills/scripted", "skills/tdd"})
+	var warn bytes.Buffer
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	require.NoError(t, os.Remove(filepath.Join(regDir, "skills", "scripted", "scripts", "helper.sh")))
+
+	// act
+	require.NoError(t, sync.Run(projectRoot, regDir, cfg, &warn))
+
+	// assert — tdd entries untouched
+	entries, err := sync.LoadLockEntries(projectRoot)
+	require.NoError(t, err)
+	var tddCount int
+	for _, e := range entries {
+		if e.Bundle == "skills/tdd" {
+			tddCount++
+		}
+	}
+	assert.Greater(t, tddCount, 0, "skills/tdd lock entries must remain")
+	assert.FileExists(t, filepath.Join(projectRoot, ".cursor", "skills", "tdd", "SKILL.md"))
+}
