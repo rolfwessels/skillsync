@@ -1,3 +1,3 @@
 registry = "/home/rolf/.skillsync/registry"
 formats = ["claude"]
-bundles = ["rules/go-general", "rules/go-naming", "rules/go-testing", "skills/commit", "skills/loop-dev-issues", "skills/dev-container"]
+bundles = ["rules/go-general", "rules/go-naming", "rules/go-testing", "skills/commit", "skills/dev-container", "skills/loop-dev-issues", "skills/to-issues"]

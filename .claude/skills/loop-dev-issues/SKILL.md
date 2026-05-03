@@ -11,17 +11,19 @@ Reads the local issue tracker under `.scratch/`, picks the next unblocked `ready
 
 - Issues live at `.scratch/<slug>/issues/<NN>-<slug>.md`
 - `Status:` line near the top controls workflow state
-- `## Blocked by` section lists blocking issue paths (or "None")
+- `## Blocked by` section lists blocking issue paths in backticks (or "None")
 
 ## Step 1 — Find the next issue
 
-1. Find all files matching `.scratch/**/issues/*.md`
-2. Read each file and collect those with `Status: ready-for-agent`
-3. Filter out any whose `## Blocked by` references an issue that is NOT `Status: done`
-4. Sort by path (lowest number first within a slug)
-5. Pick the first — that's your issue
+Run from the repo root:
 
-If none found: report current statuses and stop. Don't invent work.
+```sh
+.claude/skills/loop-dev-issues/scripts/next-issue.sh
+```
+
+It prints the path of the next unblocked `ready-for-agent` issue (lowest number first), or exits non-zero if none. The script handles the find / filter-by-status / drop-blocked / sort pipeline.
+
+If it exits non-zero: run `.claude/skills/loop-dev-issues/scripts/list-issues.sh` to report current statuses, then stop. Don't invent work.
 
 ## Step 2 — Read and confirm
 

@@ -114,3 +114,12 @@
   registry_hash = "05a13299170c821c07b518e8470a5159622d2138bd37ff4b3b110434c66b7011"
   local_hash = "05a13299170c821c07b518e8470a5159622d2138bd37ff4b3b110434c66b7011"
   state = "clean"
+
+[[entries]]
+  bundle = "skills/to-issues"
+  format = "claude"
+  target = ".claude/skills/to-issues/SKILL.md"
+  hash = "c43b60462597de2e87e7da71bd93a88c8fd3cacd6383b677d6b19ccaea425956"
+  registry_hash = "c43b60462597de2e87e7da71bd93a88c8fd3cacd6383b677d6b19ccaea425956"
+  local_hash = "c43b60462597de2e87e7da71bd93a88c8fd3cacd6383b677d6b19ccaea425956"
+  state = "clean"
