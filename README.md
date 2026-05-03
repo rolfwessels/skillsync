@@ -3,9 +3,26 @@
 [![GitHub release](https://img.shields.io/github/v/release/rolfwessels/skillsync)](https://github.com/rolfwessels/skillsync/releases)
 [![Go CI](https://github.com/rolfwessels/skillsync/actions/workflows/github-action.yml/badge.svg)](https://github.com/rolfwessels/skillsync/actions)
 
-Sync AI skills, commands, and agents across your projects from a central registry.
+Sync AI assistant bundles — skills, rules, agents, slash commands — across projects, machines, and tools from a single registry.
 
-skillsync keeps your AI assistant bundles (skills, slash commands, agent configs) consistent across every repo — pull from a shared registry, transform to the format your tooling expects, and push local edits back up.
+## 😩 Why skillsync?
+
+- You tweak a skill in `~/.claude/` on WSL — your Windows host still has the old copy.
+- You build a slash command for a Claude project, then open the next one in Cursor and want the same thing, in Cursor's format.
+- Copy-pasting bundles between machines and tools gets old fast.
+
+## ✨ How it works
+
+Point every project at one **registry** (a local folder or git repo). Bundles are stored once in canonical Claude format; `pull` transforms them on the way out into whatever the project's tool expects (`.claude/` or `.cursor/`). Edit locally, `push` back, and every other project picks it up on the next sync.
+
+```bash
+skillsync init    # set up this project (and optionally wire a git hook)
+skillsync pull    # fetch from registry → ./.claude/ or ./.cursor/
+skillsync push    # send local edits back to the registry
+skillsync sync    # both directions, with conflict detection
+```
+
+Opt into the git pre-commit hook during `init` and every commit keeps your registry in lockstep.
 
 ## ⚡ Install
 
@@ -43,7 +60,7 @@ Prefer to download by hand? Grab the right archive for your platform from the [r
 - Docker for the dev environment
 - MakeFile because it just works!
 
-## 🚀 Getting started
+## 🚀 Getting started with development
 
 This project ships with a development container that has all the tooling required to build, test, and publish.
 
