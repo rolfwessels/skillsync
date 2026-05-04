@@ -24,6 +24,8 @@ skillsync sync    # both directions, with conflict detection
 
 Opt into the git pre-commit hook during `init` and every commit keeps your registry in lockstep.
 
+![skillsync demo](docs/demo/demo.gif)
+
 ## ⚡ Install
 
 **Linux / macOS** — installs to `~/.local/bin`:
