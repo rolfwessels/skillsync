@@ -150,3 +150,57 @@
   registry_hash = "8ec0c08492b80c350647769e4c09630385cabc65614eeab8f23d3f7499f083fd"
   local_hash = "8ec0c08492b80c350647769e4c09630385cabc65614eeab8f23d3f7499f083fd"
   state = "clean"
+
+[[entries]]
+  bundle = "skills/improve-codebase-architecture"
+  format = "claude"
+  target = ".claude/skills/improve-codebase-architecture/DEEPENING.md"
+  hash = "9577485f4fc32c0267639a9151bb41c8af0f8f6086e4bf8b84d5b236e30604e9"
+  registry_hash = "9577485f4fc32c0267639a9151bb41c8af0f8f6086e4bf8b84d5b236e30604e9"
+  local_hash = "9577485f4fc32c0267639a9151bb41c8af0f8f6086e4bf8b84d5b236e30604e9"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/improve-codebase-architecture"
+  format = "claude"
+  target = ".claude/skills/improve-codebase-architecture/INTERFACE-DESIGN.md"
+  hash = "678c3e34f1339015053212b3316bf0b676c70aa251050a0613667d4e755fb35e"
+  registry_hash = "678c3e34f1339015053212b3316bf0b676c70aa251050a0613667d4e755fb35e"
+  local_hash = "678c3e34f1339015053212b3316bf0b676c70aa251050a0613667d4e755fb35e"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/improve-codebase-architecture"
+  format = "claude"
+  target = ".claude/skills/improve-codebase-architecture/LANGUAGE.md"
+  hash = "6feca2140439c54a774749e8367f18350899ff69c777144ed2248cd4407949fa"
+  registry_hash = "6feca2140439c54a774749e8367f18350899ff69c777144ed2248cd4407949fa"
+  local_hash = "6feca2140439c54a774749e8367f18350899ff69c777144ed2248cd4407949fa"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/improve-codebase-architecture"
+  format = "claude"
+  target = ".claude/skills/improve-codebase-architecture/SKILL.md"
+  hash = "9e9b617b1c70d390e37dbfd1c031c11b3de850e2e3d01c4a2c2888bdb386a247"
+  registry_hash = "9e9b617b1c70d390e37dbfd1c031c11b3de850e2e3d01c4a2c2888bdb386a247"
+  local_hash = "9e9b617b1c70d390e37dbfd1c031c11b3de850e2e3d01c4a2c2888bdb386a247"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/grill-with-docs"
+  format = "claude"
+  target = ".claude/skills/grill-with-docs/ADR-FORMAT.md"
+  hash = "f1f36cd3f8d3b6474ddd5855da4e233bfc4ae1a1c5024909ccf11871819a41b2"
+  registry_hash = "f1f36cd3f8d3b6474ddd5855da4e233bfc4ae1a1c5024909ccf11871819a41b2"
+  local_hash = "f1f36cd3f8d3b6474ddd5855da4e233bfc4ae1a1c5024909ccf11871819a41b2"
+  state = "clean"
+
+[[entries]]
+  bundle = "skills/grill-with-docs"
+  format = "claude"
+  target = ".claude/skills/grill-with-docs/CONTEXT-FORMAT.md"
+  hash = "8f6baaa3b1c91644bd7c600196b1aee781d5f525c7c345db8cdfbfb368329a05"
+  registry_hash = "8f6baaa3b1c91644bd7c600196b1aee781d5f525c7c345db8cdfbfb368329a05"
+  local_hash = "8f6baaa3b1c91644bd7c600196b1aee781d5f525c7c345db8cdfbfb368329a05"
+  state = "clean"
