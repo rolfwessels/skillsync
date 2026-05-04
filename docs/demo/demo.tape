@@ -12,7 +12,7 @@ Set LoopOffset 20%
 
 # ── Hidden setup ─────────────────────────────────────────────
 Set TypingSpeed 1ms
-Type "bash /home/rolf/work/home/skillsync/demo/setup-demo.sh && clear"
+Type "bash SKILLSYNC_ROOT/docs/demo/setup-demo.sh && clear"
 Enter
 Sleep 2s
 

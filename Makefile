@@ -70,6 +70,7 @@ help:
 	@echo " - docker-publish        : Publish the docker image"
 	@echo " - deploy        : Deploy the $(project)"
 	@echo " - update-packages : Update Go dependencies"
+	@echo " - demo            : Regenerate the demo GIF (requires vhs, ffmpeg, ttyd)"
 	@echo ""
 	@echo "Options:"
 	@echo " - env : sets the environment - supported environments are: dev | prod"
@@ -171,6 +172,14 @@ docker-publish: docker-build docker-login docker-push
 
 deploy: env-check
 	@echo -e "Deploying ${GREEN}v$(version-full)${NC}"
+
+demo:
+	@echo "Regenerating docs/demo/demo.gif..."
+	@tmp=$$(mktemp /tmp/demo-XXXXX.tape) && \
+	 sed "s|SKILLSYNC_ROOT|$(CURDIR)|g" docs/demo/demo.tape > $$tmp && \
+	 PATH="$(HOME)/.local/bin:$(PATH)" vhs $$tmp ; \
+	 rm -f $$tmp
+	@echo "Done → docs/demo/demo.gif"
 
 update-packages:
 	@echo "Updating Go dependencies to latest versions..."
