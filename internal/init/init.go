@@ -49,6 +49,9 @@ func Reconfigure(projectRoot string, prompter Prompter, warnings io.Writer) erro
 	if err := config.Update(projectRoot, result.Config); err != nil {
 		return err
 	}
+	if err := skillssync.Run(projectRoot, result.Config.Registry, result.Config, warnings); err != nil {
+		return fmt.Errorf("syncing: %w", err)
+	}
 	return applyGitHooks(projectRoot, result.InstallGitHooks, warnings)
 }
 
