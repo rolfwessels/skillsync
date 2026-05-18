@@ -25,12 +25,7 @@ func (t TUIPrompter) Ask(projectRoot string, defaults config.ProjectConfig) (Pro
 	bundles := defaults.Bundles
 	installHooks := true
 
-	bundleOptions, err := buildBundleOptions(registry, bundles)
-	if err != nil {
-		return PromptResult{}, err
-	}
-
-	groups := []*huh.Group{
+	if err := huh.NewForm(
 		huh.NewGroup(
 			huh.NewInput().
 				Title("Registry path").
@@ -49,8 +44,16 @@ func (t TUIPrompter) Ask(projectRoot string, defaults config.ProjectConfig) (Pro
 				}).
 				Value(&formats),
 		),
+	).Run(); err != nil {
+		return PromptResult{}, fmt.Errorf("aborted: %w", err)
 	}
 
+	bundleOptions, err := buildBundleOptions(registry, bundles)
+	if err != nil {
+		return PromptResult{}, err
+	}
+
+	var groups []*huh.Group
 	if len(bundleOptions) > 0 {
 		groups = append(groups, huh.NewGroup(
 			huh.NewMultiSelect[string]().
@@ -59,7 +62,6 @@ func (t TUIPrompter) Ask(projectRoot string, defaults config.ProjectConfig) (Pro
 				Value(&bundles),
 		))
 	}
-
 	if t.PromptForGitHooks && isGitWorkTree(projectRoot) {
 		groups = append(groups, huh.NewGroup(
 			huh.NewConfirm().
@@ -69,9 +71,10 @@ func (t TUIPrompter) Ask(projectRoot string, defaults config.ProjectConfig) (Pro
 				Value(&installHooks),
 		))
 	}
-
-	if err := huh.NewForm(groups...).Run(); err != nil {
-		return PromptResult{}, fmt.Errorf("aborted: %w", err)
+	if len(groups) > 0 {
+		if err := huh.NewForm(groups...).Run(); err != nil {
+			return PromptResult{}, fmt.Errorf("aborted: %w", err)
+		}
 	}
 
 	return PromptResult{

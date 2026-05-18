@@ -1,0 +1,2 @@
+description = "Commit message format: emoji + imperative, ≤72 chars"
+tags = ["git", "standard"]
