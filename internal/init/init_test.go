@@ -222,6 +222,47 @@ func TestReconfigure(t *testing.T) {
 		_, statErr := os.Stat(filepath.Join(projectDir, ".git", "hooks", "post-merge"))
 		assert.ErrorIs(t, statErr, os.ErrNotExist)
 	})
+
+	t.Run("syncs new bundle after reconfiguring", func(t *testing.T) {
+		// arrange
+		projectDir := initialisedProject(t)
+		regDir := writeTestRegistryWithSkill(t)
+		stub := &stubPrompter{cfg: config.ProjectConfig{
+			Registry: regDir,
+			Formats:  []string{"claude"},
+			Bundles:  []string{"skills/syncdemo"},
+		}}
+
+		// act
+		err := skillsinit.Reconfigure(projectDir, stub, io.Discard)
+
+		// assert
+		require.NoError(t, err)
+		assert.FileExists(t, filepath.Join(projectDir, ".claude", "skills", "syncdemo", "body.md"))
+	})
+
+	t.Run("idempotent reconfigure leaves project unchanged", func(t *testing.T) {
+		// arrange
+		projectDir := initialisedProject(t)
+		regDir := writeTestRegistryWithSkill(t)
+		stub := &stubPrompter{cfg: config.ProjectConfig{
+			Registry: regDir,
+			Formats:  []string{"claude"},
+			Bundles:  []string{"skills/syncdemo"},
+		}}
+		require.NoError(t, skillsinit.Reconfigure(projectDir, stub, io.Discard))
+		synced := filepath.Join(projectDir, ".claude", "skills", "syncdemo", "body.md")
+		info1, err := os.Stat(synced)
+		require.NoError(t, err)
+
+		// act
+		require.NoError(t, skillsinit.Reconfigure(projectDir, stub, io.Discard))
+
+		// assert
+		info2, err := os.Stat(synced)
+		require.NoError(t, err)
+		assert.Equal(t, info1.Size(), info2.Size())
+	})
 }
 
 func initialisedProject(t *testing.T) string {

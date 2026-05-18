@@ -1,0 +1,2 @@
+description = "Stage, validate, and commit changes with a well-formed message"
+tags = ["git", "standard"]
